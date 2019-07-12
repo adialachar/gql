@@ -4,6 +4,20 @@ from graphene_django.types import DjangoObjectType
 from graphene_django.filter import DjangoFilterConnectionField
 from cookbook.ingredients.models import Category, Ingredient
 
+
+
+class UserType(DjangoObjectType):
+    class Meta:
+        model = MyUser
+
+class ProfileType(DjangoObjectType):
+    class Meta:
+        model = MyProfile
+
+
+
+
+
 class CategoryNode(DjangoObjectType):
     class Meta:
         model = Category
