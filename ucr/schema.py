@@ -1,4 +1,5 @@
 from .models import MyUser, Profile
+import graphene
 from graphene import ObjectType, Node, Schema
 from graphene_django.fields import DjangoConnectionField
 from graphene_django.types import DjangoObjectType
@@ -17,6 +18,27 @@ class ProfileNode(DjangoObjectType):
         filter_fields = ('first_name','last_name',)
         interfaces = (Node, )
         #connection_class = Connection
+
+class MyUserMutation(graphene.Mutation):
+    class Arguments:
+
+        email = graphene.String(required=True)
+
+    my_user = graphene.Field(MyUserNode)
+
+        def mutate(self, info, email):
+            my_user =  MyUser.objects.get(pk=id)
+            my_user.email = email
+            my_user.save()
+
+            return MyUserMutation(my_user = my_user)
+
+class Mutation(ObjectType):
+    create_my_user =  MyUserMutation.Field()
+
+
+
+
 
 class Query(ObjectType):
 
