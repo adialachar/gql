@@ -10,13 +10,13 @@ class User(DjangoObjectType):
         model = UserModel
 
 
-class Query(graphene.ObjectType):
+class Query(ObjectType):
     users = graphene.List(User)
 
     def resolve_users(self,info):
         return UserModel.objects.all()
 
-schema = graphene.Schema(query=Query)
+schema = Schema(query=Query)
 
 
 
