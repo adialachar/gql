@@ -1,10 +1,28 @@
-from .models import MyUser, Profile
+from .models import UserModel
 import graphene
 from graphene import ObjectType, Node, Schema
 from graphene_django.fields import DjangoConnectionField
 from graphene_django.types import DjangoObjectType
 from graphene_django.filter import DjangoFilterConnectionField
 
+class User(DjangoObjectType):
+    class Meta:
+        model = UserModel
+
+
+class Query(graphene.ObjectType):
+    users = graphene.List(User)
+
+    def resolve_users(self,info):
+        return UserModel.objects.all()
+
+schema = graphene.Schema(query=Query)
+
+
+
+
+
+'''
 class MyUserNode(DjangoObjectType):
     class Meta:
         model = MyUser
@@ -49,3 +67,4 @@ class Query(ObjectType):
     all_profiles = DjangoFilterConnectionField(ProfileNode)
 
 schema = Schema(query=Query)
+'''
