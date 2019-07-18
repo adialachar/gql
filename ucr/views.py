@@ -10,14 +10,15 @@ def index(request):
     query = '''
         query{
             users{
-                name,
-                lastName
+                email,
+                password
             }
 
         }
 
         '''
-    result = schema.execute(query)
+    #result = schema.execute(query)
 
 
-    return JsonResponse(result.data)
+    #return JsonResponse(result.data)
+    return JsonResponse({"Success":True})

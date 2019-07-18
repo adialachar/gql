@@ -1,11 +1,11 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
 
 # Create your models here
 class MyUserManager(BaseUserManager):
 
-    def create_user(self, email, password=None)
+    def create_user(self, email, password=None):
 
         user = self.model(email=self.normalize_email(email))
 
