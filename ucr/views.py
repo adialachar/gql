@@ -17,8 +17,8 @@ def index(request):
         }
 
         '''
-    #result = schema.execute(query)
+    result = schema.execute(query)
 
 
-    #return JsonResponse(result.data)
-    return JsonResponse({"Success":True})
+    return JsonResponse(result.data)
+    #return JsonResponse({"Success":True})
