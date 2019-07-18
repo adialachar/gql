@@ -1,4 +1,4 @@
-from .models import MyUser
+from .models import MyUser, Profile
 import graphene
 from graphene import ObjectType, Node, Schema
 from graphene_django.fields import DjangoConnectionField

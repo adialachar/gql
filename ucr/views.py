@@ -7,7 +7,7 @@ from .schema import schema
 def index(request):
 
     #return render(request, 'index.html', context={})
-    query = '''
+    query0 = '''
         query{
             users{
                 email,
@@ -17,7 +17,19 @@ def index(request):
         }
 
         '''
-    result = schema.execute(query)
+
+
+    query1 = '''
+        query{
+            profiles{
+                firstName
+                lastName
+            }
+        }
+        '''
+
+
+    result = schema.execute(query1)
 
 
     return JsonResponse(result.data)
