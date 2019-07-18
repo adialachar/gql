@@ -22,7 +22,12 @@ def index(request):
     query1 = '''
         query{
             profiles{
-                firstName
+                user{
+                    email,
+                    password
+
+                }
+                firstName,
                 lastName
             }
         }
