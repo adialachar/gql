@@ -33,9 +33,26 @@ def index(request):
         }
         '''
 
+    query2 = """
+        query{
+        profiles(firstName:"Daniel"){
+                user{
+                    email,
+                    password
+                }
+                lastName
+
+            }
+
+        }
+            """
+
 
     result = schema.execute(query1)
 
-
-    return JsonResponse(result.data)
+    if result.data:
+        return JsonResponse(result.data)
+    else:
+        print(result.errors)
+        return JsonResponse({"Success":False})
     #return JsonResponse({"Success":True})
