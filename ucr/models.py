@@ -34,8 +34,6 @@ class MyUser(AbstractBaseUser):
             verbose_name='email address',
         max_length=255,
         unique=True,
-
-
     )
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
@@ -59,7 +57,7 @@ class MyUser(AbstractBaseUser):
 
 
 class Profile(models.Model):
-    user = models.OneToOneField(MyUser, on_delete=models.CASCADE, primary_key=True)
+    user = models.OneToOneField(MyUser, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
 

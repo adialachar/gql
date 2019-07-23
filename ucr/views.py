@@ -1,3 +1,4 @@
+import json
 from django.shortcuts import render
 from django.http import JsonResponse
 from .schema import schema
@@ -18,28 +19,28 @@ def index(request):
 
         '''
 
-
-    query1 = '''
-        query{
-            profiles{
-                user{
-                    email,
-                    password
-
-                }
+    email = "aacha002@ucr.edu"
+    query1 = """
+    query getProfile($email: String){
+            profile(email:$email){
                 firstName,
                 lastName
+
             }
         }
-        '''
+        """
+
+
+
 
     query2 = """
         query{
-        profiles(firstName:"Daniel"){
-                user{
-                    email,
+        profile{
+        user(email:"aacha002@ucr.edu"){
+
                     password
                 }
+                firstName,
                 lastName
 
             }
@@ -48,8 +49,20 @@ def index(request):
             """
 
 
-    result = schema.execute(query1)
+    query3 = """
+        query{
+        user(email:"aacha002@ucr.edu"){
+                id,
+                password
 
+
+            }
+
+        }
+            """
+
+    result = schema.execute(query1, variables={'email':"aacha002@ucr.edu"},)
+    #result = schema.execute(query0)
     if result.data:
         return JsonResponse(result.data)
     else:
