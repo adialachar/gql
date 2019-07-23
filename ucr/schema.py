@@ -45,7 +45,7 @@ class CreateUserAndProfile(graphene.Mutation):
     profile = graphene.Field(MyProfileType)
 
     def mutate(self, info, email, password, first_name, last_name):
-        u = User.objects.create_user(email=email, password=password)
+        u = MyUser.objects.create_user(email=email, password=password)
         p = Profile(user=u, first_name=first_name, last_name=last_name)
         p.save()
 

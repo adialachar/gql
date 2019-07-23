@@ -61,7 +61,42 @@ def index(request):
         }
             """
 
-    result = schema.execute(query1, variables={'email':"aacha002@ucr.edu"},)
+
+    mutation0 = """
+    mutation createUserAndProfile($email: String, $password: String, $firstName: String, $lastName: String){
+                createUser(email: $email, password: $password, firstName:$firstName, lastName:$lastName){
+
+                    user{
+
+                        email,
+                        password
+
+                        }
+
+                        profile{
+
+                            firstName,
+                            lastName
+
+
+
+                        }
+
+
+                }
+
+
+
+
+
+                }
+                """
+
+
+
+
+
+    result = schema.execute(mutation0, variables={'email':"dna003@ucr.edu",'password':"password",'firstName':"Daniel",'lastName':"Na"},)
     #result = schema.execute(query0)
     if result.data:
         return JsonResponse(result.data)
