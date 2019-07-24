@@ -104,17 +104,43 @@ class Profile(models.Model):
 
     date_of_birth = models.CharField(max_length=10)
 
-
-    RACE_CHOICES =(
-
-    (None, ''),
-
-
-
-
-
-
+    RACE_CHOICES = (
+      (None, ''),
+      ('American Indian or Alaskan Native','American Indian or Alaskan Native'),
+      ('Asian/Pacific Islander', 'Asian/Pacific Islander'), 
+      ('Black or African American','Black or African American'),
+      ('Hispanic','Hispanic'),
+      ('White/Caucasian', 'White/Caucasian'),
+      ('Multiple ethnicity/Other (Please Specify)','Multiple ethnicity/Other (Please Specify)'),
+      ('Prefer not to diclose', 'Prefer not to disclose'), 
     )
+    race = models.CharField(max_length=45, choices=RACE_CHOICES, default="")
+    race_other = models.CharField(max_length=50, blank=True, default="")
+    phone_number = models.CharField(max_length=13, default="")
+    SHIRT_SIZE_CHOICES = (
+      (None, ''),
+      ("XS", "XS"),
+      ("S", "S"),
+      ("M", "M"),
+      ("L", "L"),
+      ("XL", "XL"),
+      ("XXL", "XXL"),
+    )
+    shirt_size = models.CharField(max_length=3, choices=SHIRT_SIZE_CHOICES, default="")
+    dietary_restrictions = models.CharField(max_length=100, default="", blank=True)
+
+    #Profile Information
+    linkedin = models.URLField(max_length=200, blank=True, default="")
+    github = models.URLField(max_length=200, blank=True, default="")
+    additional_link = models.URLField(max_length=500, blank=True, default="")
+    description = models.CharField(max_length=50, default="")
+    learn_or_gain = models.TextField(max_length=1000, default="")
+    resume = models.URLField(max_length=500, blank=True, default="")
+    
+    #Conduct and Policies
+    conduct_box = models.BooleanField(default=False)
+    share_box = models.BooleanField(default=False)
+
 
 
 
