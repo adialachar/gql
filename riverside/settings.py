@@ -25,8 +25,8 @@ SECRET_KEY = 'larlefj(d*f3w=x9$vvvzoo(ooo3$63p_-97kyt)w)r!kek1jh'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['8a0c1f89.ngrok.io',]
+CSRF_COOKIE_SECURE = False
 
 # Application definition
 
