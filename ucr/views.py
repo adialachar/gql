@@ -5,6 +5,7 @@ from .schema import schema
 from .forms import SignUpForm, ProfileForm
 from . import queries
 from django.views.decorators.csrf import csrf_exempt
+from django.core.mail import send_mail
 # Create your views here.
 
 @csrf_exempt
@@ -135,9 +136,19 @@ def dummyapply(request):
         profile_form = ProfileForm(request.POST)
 
         if user_form.is_valid() and profile_form.is_valid():
-            user_form.save()
-            profile_form.save()
-            print("HIIIIIII")
+            u = user_form.save()
+            pf = profile_form.save(commit=False)
+            pf.user = u
+            pf.save()
+
+            Subject = "Thank you!"
+            from_email = "citrushack@gmail.com"
+            to_email = user_form.cleaned_data.get('email')
+            message = 'Hey ' + str(profile_form.cleaned_data.get('first_name')) + ', Thanks for applying to Cutie Hack 2019. We will be sending out decisions in month, so stay tuned. '
+
+
+            send_mail(Subject, message , from_email, [to_email],fail_silently=False)
+
             result = queries.getProfile(email=user_form.cleaned_data.get('email'))
             print(result)
             if result.data:
@@ -153,6 +164,40 @@ def dummyapply(request):
         profile_form = ProfileForm()
 
     return render(request, 'dummyapply.html', context={'user_form': user_form, 'profile_form': profile_form})
+
+def dummyallData(request):
+
+
+    if request.method == 'POST':
+
+        if request.POST.get('getAllUsersAndProfiles'):
+            print("hewwo")
+            result = queries.getAllUsersAndProfiles()
+            if result.data:
+                return JsonResponse(result.data)
+            else:
+                print(result.errors)
+                return JsonResponse(result.errors)
+
+    return render(request, 'dummyAllData.html', context={})
+
+def dummyParametrizedData(request):
+
+    if request.method == 'POST':
+
+
+        email = request.POST.get('email')
+
+        result = queries.getProfile(email)
+        if result.data:
+                return JsonResponse(result.data)
+        else:
+            print(result.errors)
+            return JsonResponse(result.errors)
+
+
+    return render(request, 'dummyParametrizedData.html', context={})
+
 
         #
         #

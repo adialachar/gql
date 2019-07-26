@@ -38,4 +38,65 @@ def getProfile(email):
         }
         """
 
-    return schema.execute(query, variables={'email':email})
+    return schema.execute(query, variables={'email':email},)
+
+
+def getUserAndProfile(email):
+
+    query = """
+        query getUserAndProfile($email: String){
+        profile{
+        user(email: $email){
+    
+                    password
+                }
+                firstName,
+                lastName
+
+            }
+
+        }
+            """
+
+    return schema.execute(query, variables={'email':email},)
+
+
+
+# def getAllUsersAndProfiles():
+#
+#     query = """
+#         query{
+#         profiles{
+#             user{
+#                     email,
+#                     password
+#                 }
+#                 firstName,
+#                 lastName
+#                 school,
+#                 levelOfStudy,
+#                 graduationYear,
+#                 major,
+#                 gender,
+#                 genderOther,
+#                 dateOfBirth,
+#                 race,
+#                 raceOther,
+#                 phoneNumber,
+#                 shirtSize,
+#                 dietaryRestrictions,
+#                 linkedin,
+#                 github,
+#                 additionalLink,
+#                 learnOrGain,
+#                 resume,
+#                 conductBox,
+#                 shareBox
+#
+#             }
+#
+#         }
+#             """
+#
+#
+#     return schema.execute(query)
