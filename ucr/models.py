@@ -65,11 +65,11 @@ class Profile(models.Model):
     LEVEL_OF_STUDY_CHOICES = (
 
     (None, ''),
-    ("Freshman","Freshman")
-    ("Sophomore","Sophomore")
-    ("Junior","Junior")
-    ("Senior","Senior")
-    ("Prefer not to disclose","Prefer not to disclose")
+    ("Freshman","Freshman"),
+    ("Sophomore","Sophomore"),
+    ("Junior","Junior"),
+    ("Senior","Senior"),
+    ("Prefer not to disclose","Prefer not to disclose"),
     )
 
     level_of_study = models.CharField(max_length=30,choices=LEVEL_OF_STUDY_CHOICES)

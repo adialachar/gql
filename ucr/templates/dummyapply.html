@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+
+
+<html>
+
+
+
+<h1>
+    Cutie Hack website lol
+</h1>
+{% csrf_token %}
+<form method='post' enctype="multipart/form-data">
+    {% csrf_token %}
+
+    {{user_form}}
+    <br><br><br><br>
+    {{profile_form}}
+    <input type="submit" name="submit" value="submit">
+</form>
+<br><br>
+
+
+
+
+
+</html>

@@ -2,7 +2,8 @@ import json
 from django.shortcuts import render
 from django.http import JsonResponse
 from .schema import schema
-
+from .forms import SignUpForm, ProfileForm
+from . import queries
 from django.views.decorators.csrf import csrf_exempt
 # Create your views here.
 
@@ -27,7 +28,7 @@ def index(request):
 
 
 
-    query0 = '''
+    query0 = """
         query{
             users{
                 email,
@@ -36,7 +37,7 @@ def index(request):
 
         }
 
-        '''
+        """
 
     email = "aacha002@ucr.edu"
     query1 = """
@@ -123,3 +124,47 @@ def index(request):
         print(result.errors)
         return JsonResponse({"Success":False})
     #return JsonResponse({"Success":True})
+
+
+
+def dummyapply(request):
+
+
+    if request.method == 'POST':
+        user_form = SignUpForm(request.POST)
+        profile_form = ProfileForm(request.POST)
+
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            print("HIIIIIII")
+            result = queries.getProfile(email=user_form.cleaned_data.get('email'))
+            print(result)
+            if result.data:
+                return JsonResponse(result.data)
+            else:
+                print(result.errors)
+                if result.errors:
+                    return JsonResponse(result.errors)
+        return JsonResponse({"Success":False})
+
+    else:
+        user_form = SignUpForm()
+        profile_form = ProfileForm()
+
+    return render(request, 'dummyapply.html', context={'user_form': user_form, 'profile_form': profile_form})
+
+        #
+        #
+        # result = queries.getProfile({'email':email})
+        #
+        # if result.data:
+        #     return JsonResponse()
+        # else:
+        #     return JsonResponse(result.errors)
+
+
+
+
+
+
