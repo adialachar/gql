@@ -8,128 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.core.mail import send_mail
 # Create your views here.
 
-@csrf_exempt
-def index(request):
-
-    #return render(request, 'index.html', context={})
-    print("Hello my baby")
-
-    if request.method == 'POST':
-        print(request.POST.get('Username',-1))
-        print(request.POST.get('Email',-1))
-        print(request.POST.get('Password',-1))
-        print(request.body)
-        print("HIIIII")
-
-        return JsonResponse({"Success":True})
-
-    else:
-        return JsonResponse({"Success":False})
-
-
-
-
-    query0 = """
-        query{
-            users{
-                email,
-                password
-            }
-
-        }
-
-        """
-
-    email = "aacha002@ucr.edu"
-    query1 = """
-    query getProfile($email: String){
-            profile(email:$email){
-                firstName,
-                lastName
-
-            }
-        }
-        """
-
-
-
-
-    query2 = """
-        query{
-        profile{
-        user(email:"aacha002@ucr.edu"){
-
-                    password
-                }
-                firstName,
-                lastName
-
-            }
-
-        }
-            """
-
-
-    query3 = """
-        query{
-        user(email:"aacha002@ucr.edu"){
-                id,
-                password
-
-
-            }
-
-        }
-            """
-
-
-    mutation0 = """
-    mutation createUserAndProfile($email: String, $password: String, $firstName: String, $lastName: String){
-                createUser(email: $email, password: $password, firstName:$firstName, lastName:$lastName){
-
-                    user{
-
-                        email,
-                        password
-
-                        }
-
-                        profile{
-
-                            firstName,
-                            lastName
-
-
-
-                        }
-
-
-                }
-
-
-
-
-
-                }
-                """
-
-
-
-
-
-    result = schema.execute(mutation0, variables={'email':"dna003@ucr.edu",'password':"password",'firstName':"Daniel",'lastName':"Na"},)
-    #result = schema.execute(query0)
-    if result.data:
-        return JsonResponse(result.data)
-    else:
-        print(result.errors)
-        return JsonResponse({"Success":False})
-    #return JsonResponse({"Success":True})
-
-
-
-def dummyapply(request):
-
+def apply(request):
 
     if request.method == 'POST':
         user_form = SignUpForm(request.POST)
@@ -150,41 +29,18 @@ def dummyapply(request):
             send_mail(Subject, message , from_email, [to_email],fail_silently=False)
 
             result = queries.getProfile(email=user_form.cleaned_data.get('email'))
-            print(result)
             if result.data:
                 return JsonResponse(result.data)
             else:
-                print(result.errors)
                 if result.errors:
                     return JsonResponse(result.errors)
-        return JsonResponse({"Success":False})
+        return JsonResponse({"Error":"The backend has concked out. Get Aditya on the line."})
 
-    else:
-        user_form = SignUpForm()
-        profile_form = ProfileForm()
+    return JsonResponse({"Error":"Did you send a GET request instead of a POST request?"})
 
-    return render(request, 'dummyapply.html', context={'user_form': user_form, 'profile_form': profile_form})
-
-def dummyallData(request):
-
+def profile(request):
 
     if request.method == 'POST':
-
-        if request.POST.get('getAllUsersAndProfiles'):
-            print("hewwo")
-            result = queries.getAllUsersAndProfiles()
-            if result.data:
-                return JsonResponse(result.data)
-            else:
-                print(result.errors)
-                return JsonResponse(result.errors)
-
-    return render(request, 'dummyAllData.html', context={})
-
-def dummyParametrizedData(request):
-
-    if request.method == 'POST':
-
 
         email = request.POST.get('email')
 
@@ -193,23 +49,28 @@ def dummyParametrizedData(request):
                 return JsonResponse(result.data)
         else:
             print(result.errors)
-            return JsonResponse(result.errors)
+            return JsonResponse({"Error":"The backend has concked out. Get Aditya on the line."})
 
 
-    return render(request, 'dummyParametrizedData.html', context={})
+    return JsonResponse({"Error":"Did you send a GET request instead of a POST request?"})
 
 
-        #
-        #
-        # result = queries.getProfile({'email':email})
-        #
-        # if result.data:
-        #     return JsonResponse()
-        # else:
-        #     return JsonResponse(result.errors)
+def login(request):
+
+    if request.method == 'POST'
+
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+
+        #login function
 
 
+        #if the login is successful, return a json that says that success is true, or the profile. If login fails, return success = false
+
+        return JsonResponse({"Success":True})
+        #or
+        result = queries.getProfile(email=email)
+        return JsonResponse(result.data)
 
 
-
-
+    return JsonResponse({"Error":"Did you send a GET request instead of a POST request?"})

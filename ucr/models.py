@@ -107,12 +107,12 @@ class Profile(models.Model):
     RACE_CHOICES = (
       (None, ''),
       ('American Indian or Alaskan Native','American Indian or Alaskan Native'),
-      ('Asian/Pacific Islander', 'Asian/Pacific Islander'), 
+      ('Asian/Pacific Islander', 'Asian/Pacific Islander'),
       ('Black or African American','Black or African American'),
       ('Hispanic','Hispanic'),
       ('White/Caucasian', 'White/Caucasian'),
       ('Multiple ethnicity/Other (Please Specify)','Multiple ethnicity/Other (Please Specify)'),
-      ('Prefer not to diclose', 'Prefer not to disclose'), 
+      ('Prefer not to diclose', 'Prefer not to disclose'),
     )
     race = models.CharField(max_length=45, choices=RACE_CHOICES, default="")
     race_other = models.CharField(max_length=50, blank=True, default="")
@@ -136,7 +136,7 @@ class Profile(models.Model):
     description = models.CharField(max_length=50, default="")
     learn_or_gain = models.TextField(max_length=1000, default="")
     resume = models.URLField(max_length=500, blank=True, default="")
-    
+
     #Conduct and Policies
     conduct_box = models.BooleanField(default=False)
     share_box = models.BooleanField(default=False)

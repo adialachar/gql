@@ -6,10 +6,9 @@ from . import views
 
 urlpatterns = [
 
-    path('', views.index, name='index'),
-    path('dummyapply/', views.dummyapply, name='dummyapply'),
-    path('dummyAllData/', views.dummyallData, name='dummyAllData'),
-    path('dummyParametrizedData/', views.dummyParametrizedData, name='dummyParametrizedData')
+    path('api/apply', views.apply, name='apply'),
+    path('api/profile', views.profile, name='profile'),
+    path('api/login', views.login, name='login')
 
 
 ]

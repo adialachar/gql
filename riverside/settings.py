@@ -25,7 +25,7 @@ SECRET_KEY = 'larlefj(d*f3w=x9$vvvzoo(ooo3$63p_-97kyt)w)r!kek1jh'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['8a0c1f89.ngrok.io','localhost']
+ALLOWED_HOSTS = ['2ed04d91.ngrok.io','localhost']
 CSRF_COOKIE_SECURE = False
 
 # Application definition
@@ -129,3 +129,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+SENDGRID_API_KEY = "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"
+
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_HOST_USER = 'apikey'
+EMAIL_HOST_PASSWORD = SENDGRID_API_KEY
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
