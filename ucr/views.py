@@ -57,7 +57,7 @@ def profile(request):
 
 def login(request):
 
-    if request.method == 'POST'
+    if request.method == 'POST':
 
         email = request.POST.get('email')
         password = request.POST.get('password')
@@ -71,6 +71,20 @@ def login(request):
         #or
         result = queries.getProfile(email=email)
         return JsonResponse(result.data)
+
+
+    return JsonResponse({"Error":"Did you send a GET request instead of a POST request?"})
+
+
+
+def email(request):
+
+    if request.method == 'POST':
+
+        email = request.POST.get('email')
+        result = queries.getUser(email=email)
+        if result.data
+            return JsonResponse(result.data)
 
 
     return JsonResponse({"Error":"Did you send a GET request instead of a POST request?"})
