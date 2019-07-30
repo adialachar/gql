@@ -88,3 +88,11 @@ def email(request):
 
 
     return JsonResponse({"Error":"Did you send a GET request instead of a POST request?"})
+
+
+
+def passwordReset(request):
+
+
+
+    return JsonResponse({"Error":"Did you send a GET request instead of a POST request?"})
