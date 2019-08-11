@@ -1,6 +1,7 @@
 import json
 from django.shortcuts import render
 from django.http import JsonResponse
+from django.contrib.auth import authenticate, login as auth_login
 from .schema import schema
 from .forms import SignUpForm, ProfileForm
 from . import queries
@@ -35,8 +36,11 @@ def apply(request):
                 if result.errors:
                     return JsonResponse(result.errors)
         return JsonResponse({"Error":"The backend has concked out. Get Aditya on the line."})
-
+    else:
+        user_form = SignUpForm()
+        profile_form = ProfileForm()
     return JsonResponse({"Error":"Did you send a GET request instead of a POST request?"})
+    # return render(request, 'dummyapply.html', {'user_form': user_form, 'profile_form': profile_form})
 
 def profile(request):
 
@@ -49,7 +53,7 @@ def profile(request):
                 return JsonResponse(result.data)
         else:
             print(result.errors)
-            return JsonResponse({"Error":"The backend has concked out. Get Aditya on the line."})
+            return JsonResponse({"Error":"The backend has concked out. It is likely the user doesn't exist. Get Aditya on the line."})
 
 
     return JsonResponse({"Error":"Did you send a GET request instead of a POST request?"})
@@ -63,17 +67,24 @@ def login(request):
         password = request.POST.get('password')
 
         #login function
+        user = authenticate(request, email=email, password=password)
+        if user is not None:
+            auth_login(request, user)
+            return JsonResponse({"Success":True})
+        else:
+            return JsonResponse({"success":False})
 
 
         #if the login is successful, return a json that says that success is true, or the profile. If login fails, return success = false
 
-        return JsonResponse({"Success":True})
+        # return JsonResponse({"Meme":True})
         #or
-        result = queries.getProfile(email=email)
-        return JsonResponse(result.data)
+        # result = queries.getProfile(email=email)
+        # return JsonResponse(result.data)
 
 
     return JsonResponse({"Error":"Did you send a GET request instead of a POST request?"})
+    # return render(request, 'login.html')
 
 
 
@@ -83,8 +94,8 @@ def email(request):
 
         email = request.POST.get('email')
         result = queries.getUser(email=email)
-        if result.data
-            return JsonResponse(result.data)
+        if result.data:
+            return JsonResponse({"Succ":False})
 
 
     return JsonResponse({"Error":"Did you send a GET request instead of a POST request?"})

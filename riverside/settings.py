@@ -27,7 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['2ed04d91.ngrok.io','localhost']
 CSRF_COOKIE_SECURE = False
-
+AUTH_USER_MODEL = 'ucr.MyUser'
 # Application definition
 
 INSTALLED_APPS = [
