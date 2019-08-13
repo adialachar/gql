@@ -48,9 +48,6 @@ class ProfileForm(forms.ModelForm):
 
          'linkedin', 
          'github', 
-         'additional_link', 
-         'description',
-         'learn_or_gain',
          'resume',
 
          'conduct_box',
