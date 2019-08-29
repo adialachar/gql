@@ -10,108 +10,21 @@ from . import queries
 from django.views.decorators.csrf import csrf_exempt
 from django.core.mail import send_mail
 import ast
+
+from rest_framework import viewsets
+from .serializers import MyUserSerializer
+from django.core.mail import EmailMessage
+
+
+import jwt
+
+
+class MyUserView(viewsets.ModelViewSet):
+    queryset = MyUser.objects.all()
+    serializer_class = MyUserSerializer
 # Create your views here.
+
 @csrf_exempt
-def apply(request):
-
-    if request.method == 'POST':
-        # print(request.body)
-        # print("this one is important")
-        # print(request.POST)
-        # print(type(request.body))
-        # b = request.body.decode("utf-8")
-        # uz = ast.literal_eval(b)
-        # print(repr(uz))
-        try:
-            #creating user model
-            data = json.loads(request.body)
-            print(data)
-            email = data['email']
-            print(email)
-            password1 = data['password1']
-            print(password1)
-            password2 = data['password2']
-
-            first_name = data['first_name']
-            last_name = data['last_name']
-            school = data['school']
-
-            level_of_study = data['level_of_study']
-            graduation_year = data['graduation_year']
-            major = data['major']
-
-            gender = data['gender']
-            gender_other = data['gender_other']
-
-            date_of_birth = data['date_of_birth']
-
-            race = data['race']
-            race_other = data['race_other']
-            phone_number = data['phone_number']
-
-            shirt_size = data['shirt_size']
-            dietary_restrictions = data['dietary_restrictions']
-
-            linkedin = data['linkedin']
-            github = data['github']
-            resume = data['resume']
-
-            conduct_box = data['conduct_box']
-            share_box = data['share_box']
-
-
-            if password1 == password2:
-                print('passwords match')
-                u = MyUser.objects.create_user(email=email, password=password2)
-
-                pf = Profile(first_name=first_name, last_name=last_name, school=school, level_of_study=level_of_study, \
-                graduation_year=graduation_year, major=major, gender=gender, gender_other=gender_other, date_of_birth=date_of_birth, \
-                race=race, race_other=race_other, phone_number=phone_number, shirt_size=shirt_size, dietary_restrictions=dietary_restrictions, \
-                linkedin=linkedin, github=github, resume=resume, conduct_box=conduct_box, share_box=share_box)
-                pf.save(commit=False)
-                pf.user=u
-                pf.save()
-            else:
-                JsonResponse({"Error": "Passwords do not match"})
-        except IntegrityError as e:
-            return JsonResponse({"Error": str(e)})
-        except Exception as e: 
-            return JsonResponse({"Error": str(e)})
-
-        # print("HELLOOOOO")
-        #user_form = SignUpForm(json.loads(b))
-        # profile_form = ProfileForm(request.POST)
-        #print(user_form)
-        #if user_form.is_valid(): 
-        #    print("good morning vietnam")
-             #profile_form.is_valid():
-        #    u = user_form.save()
-            #pf = profile_form.save(commit=False)
-            #pf.user = u
-            #pf.save()
-        #    print(u)
-            # Subject = "Thank you!"
-            # from_email = "citrushack@gmail.com"
-            # to_email = user_form.cleaned_data.get('email')
-            # message = 'Hey ' + str(profile_form.cleaned_data.get('first_name')) + ', Thanks for applying to Cutie Hack 2019. We will be sending out decisions in month, so stay tuned. '
-
-        #    return JsonResponse({"Success":True})
-            # send_mail(Subject, message , from_email, [to_email],fail_silently=False)
-
-            # result = queries.getProfile(email=user_form.cleaned_data.get('email'))
-            # if result.data:
-            #     return JsonResponse(result.data)
-            # else:
-            #     if result.errors:
-            #         return JsonResponse(result.errors)
-        # return JsonResponse({"Error":"The backend has concked out. Get Aditya on the line."})
-    else:
-        print("error")
-        # user_form = SignUpForm()
-        #profile_form = ProfileForm()
-    return JsonResponse({"Error":"Did you send a GET request instead of a POST request?"})
-    #return render(request, 'dummyapply.html', {'user_form': user_form})
-
 def profile(request):
 
     if request.method == 'POST':
@@ -128,44 +41,76 @@ def profile(request):
 
     return JsonResponse({"Error":"Did you send a GET request instead of a POST request?"})
 
-
+@csrf_exempt
 def login(request):
 
     if request.method == 'POST':
 
-        email = request.POST.get('email')
-        password = request.POST.get('password')
-
+        # email = request.POST.get('email')
+        # password = request.POST.get('password')
+        data = json.loads(request.body)
+        email = data['email']
+        password = data['password']
+        print(email)
+        print(password)
         #login function
         user = authenticate(request, email=email, password=password)
+        print(user)
         if user is not None:
             auth_login(request, user)
+
+            token = jwt.encode({'user':email}, "SECRET_KEY")
+            try:
+                decToken = jwt.decode(token, "SECRET_KEY")
+            except:
+                return JsonResponse({"ur mom": "gei"})
+ 
+            result = queries.getProfile(email)
+      
+
+            profile_data = json.loads(json.dumps(result.data))
+            print(profile_data)
+            print(type(profile_data))
+            print(token)
+            token = token.decode('utf-8')
+
+
+            return JsonResponse({'user':profile_data, 'token':token})
+
             return JsonResponse({"Success":True})
         else:
             return JsonResponse({"success":False})
 
 
-        #if the login is successful, return a json that says that success is true, or the profile. If login fails, return success = false
-
-        # return JsonResponse({"Meme":True})
-        #or
-        # result = queries.getProfile(email=email)
-        # return JsonResponse(result.data)
-
-
     return JsonResponse({"Error":"Did you send a GET request instead of a POST request?"})
-    # return render(request, 'login.html')
+  
 
 
 
+
+def send_email(subject, body, to):
+    email = EmailMessage(subject, body, 'citrushack@gmail.com', to)
+    email.send(fail_silently=False)
+
+
+@csrf_exempt
 def email(request):
 
     if request.method == 'POST':
-
-        email = request.POST.get('email')
-        result = queries.getUser(email=email)
+        
+        data = json.loads(request.body)
+        email_addy = data['email']
+        result = queries.getUserAndProfile(email=email_addy)
+        if result.errors:
+            print(result.errors)
+            return JsonResponse({"lmao":"heres your issue"})
         if result.data:
-            return JsonResponse({"Succ":False})
+            subject = "Thank you for applying to Cutie Hack 2019!"
+            body = "Thank you for applying to Cutie Hack this fall. Make sure to check this email for updates from us. We hope to see you there! \n \n Sincerely, \n The Cutie Hack Team"
+            send_email(subject=subject, body=body, to=[email_addy])
+
+            return JsonResponse({"Status":"Successfully sent email"})
+
 
 
     return JsonResponse({"Error":"Did you send a GET request instead of a POST request?"})
@@ -177,3 +122,35 @@ def passwordReset(request):
 
 
     return JsonResponse({"Error":"Did you send a GET request instead of a POST request?"})
+
+
+
+
+@csrf_exempt
+def validateToken(request):
+
+
+    if 'token' in request.headers:
+        token = request.headers['token']
+        print(token)
+        token = token.encode('utf-8')
+        print(token)
+
+    if not token:
+        return JsonResponse({'message':'Token is missing'}), 403
+    
+    try:
+        decToken = jwt.decode(token, "SECRET_KEY")
+    except:
+        return JsonResponse({"Error": "Invalid Token"})
+    print(decToken)
+    email_addy = decToken['user']
+
+    result = queries.getProfile(email_addy)
+
+    if result.data:
+        return JsonResponse({'user':result.data})
+    else:
+        return JsonResponse({"Error":"User does not exist"})
+
+

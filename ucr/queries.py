@@ -26,8 +26,6 @@ def getProfile(email):
                 dietaryRestrictions,
                 linkedin,
                 github,
-                additionalLink,
-                learnOrGain,
                 resume,
                 conductBox,
                 shareBox
@@ -44,17 +42,11 @@ def getProfile(email):
 def getUserAndProfile(email):
 
     query = """
-        query getUserAndProfile($email: String){
-        profile{
+        query getUser($email: String){
         user(email: $email){
     
                     password
                 }
-                firstName,
-                lastName
-
-            }
-
         }
             """
 

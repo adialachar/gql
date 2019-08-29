@@ -25,7 +25,7 @@ SECRET_KEY = 'larlefj(d*f3w=x9$vvvzoo(ooo3$63p_-97kyt)w)r!kek1jh'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['a9ac4bbd.ngrok.io','localhost']
+ALLOWED_HOSTS = ['3ec7978f.ngrok.io','localhost']
 CSRF_COOKIE_SECURE = False
 AUTH_USER_MODEL = 'ucr.MyUser'
 # Application definition
@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'ucr',
     'graphene_django',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -131,10 +132,3 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 
-SENDGRID_API_KEY = "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"
-
-EMAIL_HOST = 'smtp.sendgrid.net'
-EMAIL_HOST_USER = 'apikey'
-EMAIL_HOST_PASSWORD = SENDGRID_API_KEY
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True

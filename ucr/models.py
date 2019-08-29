@@ -24,9 +24,16 @@ class MyUserManager(BaseUserManager):
         return user
 
 
+class ProfileManager(models.Manager):
 
+    def create_profile(self,user,profile_data):
 
+        pf = Profile(user=user, first_name = profile_data['first_name'], last_name = profile_data['last_name'], school = profile_data['school'], level_of_study = profile_data['level_of_study'], graduation_year=profile_data['graduation_year'], major=profile_data['major'], gender=profile_data['gender'], gender_other=profile_data['gender_other'], race=profile_data['race'], race_other=profile_data['race_other'], phone_number=profile_data['phone_number'], date_of_birth=profile_data['date_of_birth'],shirt_size=profile_data['shirt_size'], dietary_restrictions=profile_data['dietary_restrictions'], linkedin=profile_data['linkedin'], github=profile_data['github'], resume=profile_data['resume'], conduct_box=profile_data['conduct_box'], share_box=profile_data['share_box'])
+        pf.save()
 
+# user, first_name, last_name, school, level_of_study, graduation_year, major, \
+#     gender, gender_other, race, race_other, phone_number, date_of_birth, shirt_size, dietary_restrictions, linkedin, \
+#     github, resume, conduct_box, share_box
 
 class MyUser(AbstractBaseUser):
 
@@ -62,6 +69,7 @@ class Profile(models.Model):
     last_name = models.CharField(max_length=30)
     school = models.CharField(max_length=30)
 
+    objects = ProfileManager()
     # LEVEL_OF_STUDY_CHOICES = (
 
     # (None, ''),

@@ -78,6 +78,8 @@ class Query(ObjectType):
         return MyUser.objects.all()
 
     def resolve_user(self, info, email):
+        print("HELLLOOOOOO")
+        print(email)
         return MyUser.objects.get(email=email)
 
     def resolve_profile(self, info, email):
