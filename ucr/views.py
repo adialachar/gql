@@ -14,14 +14,15 @@ import ast
 from rest_framework import viewsets
 from .serializers import MyUserSerializer
 from django.core.mail import EmailMessage
-
+from rest_framework.views import APIView
 
 import jwt
 
 
-class MyUserView(viewsets.ModelViewSet):
+class MyUserView(viewsets.ModelViewSet, APIView):
     queryset = MyUser.objects.all()
     serializer_class = MyUserSerializer
+
 # Create your views here.
 
 @csrf_exempt
@@ -49,8 +50,9 @@ def login(request):
         # email = request.POST.get('email')
         # password = request.POST.get('password')
         data = json.loads(request.body)
-        email = data['email']
-        password = data['password']
+        print(data)
+        email = data['user']['email']
+        password = data['user']['password']
         print(email)
         print(password)
         #login function
@@ -64,9 +66,9 @@ def login(request):
                 decToken = jwt.decode(token, "SECRET_KEY")
             except:
                 return JsonResponse({"ur mom": "gei"})
- 
+
             result = queries.getProfile(email)
-      
+
 
             profile_data = json.loads(json.dumps(result.data))
             print(profile_data)
@@ -75,7 +77,7 @@ def login(request):
             token = token.decode('utf-8')
 
 
-            return JsonResponse({'user':profile_data, 'token':token})
+            return JsonResponse({'user':profile_data, 'jwt':token})
 
             return JsonResponse({"Success":True})
         else:
@@ -83,7 +85,7 @@ def login(request):
 
 
     return JsonResponse({"Error":"Did you send a GET request instead of a POST request?"})
-  
+
 
 
 
@@ -97,8 +99,9 @@ def send_email(subject, body, to):
 def email(request):
 
     if request.method == 'POST':
-        
+        print("HELLO")
         data = json.loads(request.body)
+        print(data)
         email_addy = data['email']
         result = queries.getUserAndProfile(email=email_addy)
         if result.errors:
@@ -129,16 +132,17 @@ def passwordReset(request):
 @csrf_exempt
 def validateToken(request):
 
-
-    if 'token' in request.headers:
-        token = request.headers['token']
+    token = None
+    if 'Authorization' in request.headers:
+        print("HEWWO")
+        token = request.headers['Authorization']
         print(token)
         token = token.encode('utf-8')
         print(token)
 
     if not token:
         return JsonResponse({'message':'Token is missing'}), 403
-    
+
     try:
         decToken = jwt.decode(token, "SECRET_KEY")
     except:
