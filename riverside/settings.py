@@ -25,7 +25,7 @@ SECRET_KEY = 'larlefj(d*f3w=x9$vvvzoo(ooo3$63p_-97kyt)w)r!kek1jh'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['3ec7978f.ngrok.io','localhost']
+ALLOWED_HOSTS = ['85318eb5.ngrok.io','localhost']
 CSRF_COOKIE_SECURE = False
 AUTH_USER_MODEL = 'ucr.MyUser'
 # Application definition
@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'ucr',
     'graphene_django',
     'rest_framework',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -50,6 +51,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 ]
 
 GRAPHENE = {
@@ -130,5 +133,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
 
 
